@@ -7,12 +7,12 @@ class Schemas:
         "created_at" DATETIME NOT NULL,
         "cleaned_by" TEXT,
         "cleaned_at" DATETIME,
-        "location_x" REAL,
-        "location_y" REAL,
-        "trash_type_id" INTEGER,
-        "status_id" INTEGER,
-        "severity_id" INTEGER,
-        "image_url" TEXT,
+        "location_x" REAL NOT NULL,
+        "location_y" REAL NOT NULL,
+        "trash_type_id" INTEGER NOT NULL,
+        "status_id" INTEGER NOT NULL,
+        "severity_id" INTEGER NOT NULL,
+        "image_url" TEXT NOT NULL,
         "description" TEXT,
         PRIMARY KEY("id" AUTOINCREMENT),
         FOREIGN KEY("trash_type_id") REFERENCES trash_type(id),
@@ -25,7 +25,7 @@ class Schemas:
         CREATE TABLE "trash_type"
         (
         "id" INTEGER,
-        "type_name" TEXT,
+        "name" TEXT NOT NULL,
         PRIMARY KEY("id" AUTOINCREMENT)
         )
         """
@@ -34,10 +34,10 @@ class Schemas:
         CREATE TABLE "user"
         (
         "id" INTEGER,
-        "username" TEXT,
-        "password" TEXT,
-        "email" TEXT,
-        "user_type_id" ID,
+        "username" TEXT NOT NULL,
+        "password" TEXT NOT NULL,
+        "email" TEXT NOT NULL,
+        "user_type_id" ID NOT NULL,
         PRIMARY KEY("id" AUTOINCREMENT),
         FOREIGN KEY("user_type_id") REFERENCES user_type(id)
         )
@@ -47,7 +47,7 @@ class Schemas:
         CREATE TABLE "user_type"
         (
         "id" INTEGER,
-        "name" TEXT,
+        "name" TEXT NOT NULL,
         PRIMARY KEY("id" AUTOINCREMENT)
         )
         """
@@ -56,8 +56,7 @@ class Schemas:
         CREATE TABLE "status"
         (
         "id" INTEGER,
-        "name" TEXT,
-        "description" TEXT,
+        "name" TEXT NOT NULL,
         PRIMARY KEY("id" AUTOINCREMENT)
         )
         """
@@ -66,8 +65,7 @@ class Schemas:
         CREATE TABLE "severity"
         (
         "id" INTEGER,
-        "name" TEXT,
-        "description" TEXT,
+        "name" TEXT NOT NULL,
         PRIMARY KEY("id" AUTOINCREMENT)
         )
         """

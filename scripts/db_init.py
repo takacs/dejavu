@@ -1,4 +1,6 @@
 from schemas import ALL_TABLE_SCHEMAS
+from setup_queries import ALL_SETUP_QUERIES
+
 import os
 
 import appdirs
@@ -11,7 +13,7 @@ APP_NAME = "trashman"
 def init_db() -> None:
     app_folder_path = appdirs.user_data_dir(APP_NAME)
     if not os.path.isdir(app_folder_path):
-        print(f"creating {app_folder_path} dir")
+        print(f"creating {app_folder_path}")
         os.mkdir(app_folder_path)
 
     # TODO: use Path
@@ -24,6 +26,9 @@ def init_db() -> None:
     with sqlite3.connect(db_file_path) as conn:
         for schema in ALL_TABLE_SCHEMAS:
             conn.execute(schema)
+        for query in ALL_SETUP_QUERIES:
+            print(query)
+            conn.execute(query)
 
 
 if __name__ == "__main__":

@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "api"
+name = "trashman"
 version = "0.1.0"
 description = ""
 authors = ["takacs <davidetkcs@gmail.com>"]
@@ -7,7 +7,9 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.12"
+fastapi = "^0.111.1"
 appdirs = "^1.4.4"
+pydantic = "^2.8.2"
 
 
 [build-system]
