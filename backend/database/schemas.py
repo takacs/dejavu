@@ -3,9 +3,9 @@ class Schemas:
         CREATE TABLE "trash"
         (
         "id" INTEGER,
-        "created_by" TEXT NOT NULL,
+        "created_user_id" TEXT NOT NULL,
         "created_at" DATETIME NOT NULL,
-        "cleaned_by" TEXT,
+        "cleaned_user_id" TEXT,
         "cleaned_at" DATETIME,
         "location_x" REAL NOT NULL,
         "location_y" REAL NOT NULL,
@@ -18,6 +18,9 @@ class Schemas:
         FOREIGN KEY("trash_type_id") REFERENCES trash_type(id),
         FOREIGN KEY("status_id") REFERENCES status(id),
         FOREIGN KEY("severity_id") REFERENCES severity(id)
+        FOREIGN KEY("created_user_id") REFERENCES user(id)
+        FOREIGN KEY("cleaned_user_id") REFERENCES user(id)
+
         )
         """
 
@@ -70,6 +73,10 @@ class Schemas:
         )
         """
 
+    ENFORCE_FK = """
+        PRAGMA foreign_keys = ON
+        """
+
 
 ALL_TABLE_SCHEMAS = [
     Schemas.USER_TYPE,
@@ -78,4 +85,5 @@ ALL_TABLE_SCHEMAS = [
     Schemas.SEVERITY,
     Schemas.USER,
     Schemas.TRASH,
+    Schemas.ENFORCE_FK,
 ]
