@@ -1,5 +1,5 @@
 def test_root(test_client):
-    response = test_client.get("/api/healthchecker")
+    response = test_client.get("/api/health")
     assert response.status_code == 200
     assert response.json() == {"message": "api is healthy"}
 

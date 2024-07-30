@@ -57,7 +57,7 @@ def user_payload():
         "username": "david",
         "email": "pw1",
         "user_type_id": 1,
-        "create_date": "2024-07-28T23:18:19.272Z",
+        "created_date": "2024-07-28T23:18:19.272Z",
     }
 
 
@@ -69,4 +69,19 @@ def user_payload_updated():
         "last_name": "Doe",
         "address": "321 Farmville",
         "activated": True,
+    }
+
+
+@pytest.fixture()
+def trash_payload_updated():
+    """Generate an updated user payload."""
+    return {
+        "id": 7,
+        "created_user_id": 1,
+        "created_date": "2024-07-28T23:18:19.272Z",
+        "location_x": 42.1234,
+        "location_y": 42.1234,
+        "status_id": 1,
+        "severity_id": 1,
+        "description": "test",
     }
