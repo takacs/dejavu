@@ -1,20 +1,19 @@
 from enum import Enum
 from datetime import datetime
 from typing import List
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 
 
 class UserBaseSchema(BaseModel):
+    model_config = ConfigDict(
+        from_attributes=True, populate_by_name=True, arbitrary_types_allowed=True
+    )
+
     id: int
     username: str
     email: str
     user_type_id: int
     create_date: datetime
-
-    class Config:
-        from_attributes = True
-        populate_by_name = True
-        arbitrary_types_allowed = True
 
 
 class Status(Enum):
