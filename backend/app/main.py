@@ -1,4 +1,4 @@
-from app import models, user
+from app import models, user, trash
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.database import engine
@@ -21,8 +21,9 @@ app.add_middleware(
 
 
 app.include_router(user.router, tags=["Users"], prefix="/api/users")
+app.include_router(trash.router, tags=["Trash"], prefix="/api/trash")
 
 
-@app.get("/api/healthchecker")
+@app.get("/api/health")
 def root():
     return {"message": "api is healthy"}

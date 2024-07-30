@@ -1,11 +1,8 @@
 from datetime import datetime
-
 from typing_extensions import Annotated, Optional
-
-from app.database import Base
-from sqlalchemy import ForeignKey
-from sqlalchemy import func
+from sqlalchemy import ForeignKey, func
 from sqlalchemy.orm import Mapped, mapped_column, relationship
+from app.database import Base
 
 intpk = Annotated[int, mapped_column(primary_key=True)]
 
@@ -16,11 +13,16 @@ class User(Base):
     id: Mapped[intpk] = mapped_column(autoincrement=True)
     username: Mapped[str] = mapped_column(unique=True)
     email: Mapped[str] = mapped_column(unique=True)
-    create_date: Mapped[datetime] = mapped_column(insert_default=func.now())
+    created_date: Mapped[datetime] = mapped_column(insert_default=func.now())
     user_type_id: Mapped[int] = mapped_column(ForeignKey("user_type.id"))
 
     user_type = relationship("UserType", back_populates="user")
-    user_type = relationship("Trash", back_populates="user")
+    created_trash = relationship(
+        "Trash", back_populates="created_user", foreign_keys="[Trash.created_user_id]"
+    )
+    cleaned_trash = relationship(
+        "Trash", back_populates="cleaned_user", foreign_keys="[Trash.cleaned_user_id]"
+    )
 
 
 class UserType(Base):
@@ -33,22 +35,31 @@ class UserType(Base):
 
 
 class Trash(Base):
-    __tablename__ = "user"
+    __tablename__ = "trash"
 
     id: Mapped[intpk] = mapped_column(autoincrement=True)
-    created_user_id: Mapped[str] = mapped_column(ForeignKey("user.id"))
-    created_at: Mapped[datetime]
-    cleaned_user_id: Optional[Mapped[str]] = mapped_column(ForeignKey("user.id"))
-    cleaned_at: Optional[Mapped[datetime]]
+    created_user_id: Mapped[int] = mapped_column(ForeignKey("user.id"))
+    created_date: Mapped[datetime] = mapped_column(default=func.now())
+    cleaned_user_id: Mapped[Optional[int]] = mapped_column(
+        ForeignKey("user.id"), nullable=True
+    )
+    cleaned_at: Mapped[Optional[datetime]] = mapped_column(nullable=True)
     location_x: Mapped[float]
     location_y: Mapped[float]
-    status_id: Mapped[int] = mapped_column(ForeignKey("trash_type.id"))
+    status_id: Mapped[int] = mapped_column(ForeignKey("status.id"))
     severity_id: Mapped[int] = mapped_column(ForeignKey("severity.id"))
-    image_url: Optional[Mapped[str]]
+    trash_type_id: Mapped[int] = mapped_column(ForeignKey("trash_type.id"))
     description: Mapped[str]
 
-    user_type = relationship("User", back_populates="trash")
-    user_type = relationship("TrashType", back_populates="trash")
+    created_user = relationship(
+        "User", back_populates="created_trash", foreign_keys=[created_user_id]
+    )
+    cleaned_user = relationship(
+        "User", back_populates="cleaned_trash", foreign_keys=[cleaned_user_id]
+    )
+    trash_type = relationship("TrashType", back_populates="trash")
+    severity = relationship("Severity", back_populates="trash")
+    status = relationship("Status", back_populates="trash")
 
 
 class TrashType(Base):
@@ -57,7 +68,7 @@ class TrashType(Base):
     id: Mapped[intpk] = mapped_column(autoincrement=True)
     name: Mapped[str]
 
-    user = relationship("Trash", back_populates="trash_type")
+    trash = relationship("Trash", back_populates="trash_type")
 
 
 class Status(Base):
@@ -66,7 +77,7 @@ class Status(Base):
     id: Mapped[intpk] = mapped_column(autoincrement=True)
     name: Mapped[str]
 
-    user = relationship("Trash", back_populates="status")
+    trash = relationship("Trash", back_populates="status")
 
 
 class Severity(Base):
@@ -75,10 +86,4 @@ class Severity(Base):
     id: Mapped[intpk] = mapped_column(autoincrement=True)
     name: Mapped[str]
 
-    user = relationship("Trash", back_populates="status")
-
-
-if __name__ == "__main__":
-    from sqlalchemy.schema import CreateTable
-
-    print(CreateTable(User.__table__))
+    trash = relationship("Trash", back_populates="severity")

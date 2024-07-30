@@ -73,7 +73,7 @@ def user_payload_updated():
 
 
 @pytest.fixture()
-def trash_payload_updated():
+def trash_payload():
     """Generate an updated user payload."""
     return {
         "id": 7,
@@ -83,5 +83,6 @@ def trash_payload_updated():
         "location_y": 42.1234,
         "status_id": 1,
         "severity_id": 1,
+        "trash_type_id": 1,
         "description": "test",
     }
