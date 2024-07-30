@@ -27,11 +27,10 @@ Base.metadata.create_all(bind=engine)
 def db_session():
     """Create a new database session with a rollback at the end of the test."""
     connection = engine.connect()
-    transaction = connection.begin()
+    connection.begin()
     session = TestingSessionLocal(bind=connection)
     yield session
     session.close()
-    transaction.rollback()
     connection.close()
 
 
@@ -57,7 +56,7 @@ def user_payload():
         "id": 7,
         "username": "david",
         "email": "pw1",
-        "user_type_id": "1",
+        "user_type_id": 1,
         "create_date": "2024-07-28T23:18:19.272Z",
     }
 
